@@ -32,3 +32,21 @@ Migrations/obj/
 # OS
 .DS_Store
 Thumbs.db
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+
+# Visual Studio cache/options
+.vs/
+
+# Client-side libraries
+wwwroot/lib/
+
+# Node modules (si usas npm)
+node_modules/
