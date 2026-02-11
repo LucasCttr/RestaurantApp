@@ -1,0 +1,28 @@
+@model IEnumerable<Product>
+@{
+    ViewBag.Title = $"Menu Items";
+}
+
+<h1>Menu Items</h1>
+<a asp-action="AddEdit" class="btn btn-primary">Create New Menu Item</a>
+
+<div class="row g-4">
+    @foreach (Product pi in Model)
+    {
+        <div class="col-md-3">
+            <form asp-action="delete" asp-controller="product" method="post">
+                <input type="hidden" asp-for="@pi.ProductId" />
+                <div class="card" style="width: 18rem;">
+                    <img src="@Url.Content($"~/images/"+ pi?.ImageUrl)" class="card-img-top fixed-image-height"
+                         alt="@pi.Description" />
+                    <div class="card-body">
+                        <h5 class="card-title">@pi.Name</h5>
+                        <p class="card-text">@pi.Description</p>
+                        <p class="card-text">@pi.Price.ToString("C")</p>
+                        <p class="card-text">Quantity In Stock: @pi.Stock</p>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
