@@ -47,10 +47,12 @@ namespace RestaurantApp.Controllers
             else
             {
                 ViewBag.Operation = "Edit";
-                return View(await products.GetByIdAsync(id, new QueryOptions<Product>
+                Product product = await products.GetByIdAsync(id, new QueryOptions<Product>
                 {
                     Includes = "ProductIngredients,ProductIngredients.Ingredient, Category"
-                }));
+                });
+                ViewBag.Operation = "Edit";
+                return View(product);
             }
         }
 
@@ -89,16 +91,60 @@ namespace RestaurantApp.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("index", "Product");
+                    var existingProduct = await products.GetByIdAsync(product.ProductId, new QueryOptions<Product>
+                    {
+                        Includes = "ProductIngredients"
+                    });
+                    if (existingProduct == null)
+                    {
+                        ModelState.AddModelError("", "Product not found");
+                        ViewBag.Ingredients = await ingredients.GetAllAsync();
+                        ViewBag.Categories = await categories.GetAllAsync();
+                        return View(product);
+                    }
+                    existingProduct.Name = product.Name;
+                    existingProduct.Description = product.Description;
+                    existingProduct.Price = product.Price;
+                    existingProduct.Stock = product.Stock;
+                    existingProduct.CategoryId = catId;
+
+                    // Actualizar imagen si se sube una nueva
+                    if (product.ImageFile != null)
+                    {
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + product.ImageFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await product.ImageFile.CopyToAsync(fileStream);
+                        }
+                        existingProduct.ImageUrl = uniqueFileName;
+                    }
+
+                    existingProduct.ProductIngredients?.Clear();
+                    foreach (int id in ingredientIds)
+                    {
+                        existingProduct.ProductIngredients?.Add(new ProductIngredient
+                        {
+                            IngredientId = id,
+                            ProductId = existingProduct.ProductId
+                        });
+                    }
+                    try
+                    {
+                        await products.UpdateAsync(existingProduct);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error updating product");
+                        ModelState.AddModelError("", "An error occurred while updating the product.");
+                        ViewBag.Ingredients = await ingredients.GetAllAsync();
+                        ViewBag.Categories = await categories.GetAllAsync();
+                        return View(product);
+                    }
                 }
             }
-            else
-            {
-                return View(product);
-            }
+            return RedirectToAction("index", "Product");
         }
-
-
-
     }
 }
