@@ -7,7 +7,7 @@ namespace RestaurantApp.Models
     public class Repository<T> : IRepository<T> where T : class
     {
         protected AppDbContext _context { get; set; }
-        private DbSet<T> _dbSet {get; set;}
+        private DbSet<T> _dbSet { get; set; }
 
         public Repository(AppDbContext context)
         {
@@ -46,18 +46,15 @@ namespace RestaurantApp.Models
 
         public async Task UpdateAsync(T entity)
         {
-            _context.Set<T>().Update(entity);
+            _context.Update(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var entity = await GetByIdAsync(id, new QueryOptions<T>());
-            if (entity != null)
-            {
-                _context.Set<T>().Remove(entity);
-                await _context.SaveChangesAsync();
-            }
+            T entity = await _dbSet.FindAsync(id);
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

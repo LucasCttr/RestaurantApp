@@ -29,7 +29,7 @@ namespace RestaurantApp.Controllers
             if (ingredient == null)
                 return NotFound();
             return View(ingredient);
-        } 
+        }
 
         // Ingredient/Create
         [HttpGet]
@@ -48,7 +48,48 @@ namespace RestaurantApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(ingredient);
-            
+
+        }
+
+        // Ingredient/Delete/{id}
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return View(await ingredients.GetByIdAsync(id, new QueryOptions<Ingredient>
+            {
+                Includes = "ProductIngredients,ProductIngredients.Product"
+            }));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Ingredient ingredient)
+        {
+            await ingredients.DeleteAsync(ingredient.IngredientId);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Ingredient/Edit/{id}
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            return View(await ingredients.GetByIdAsync(id, new QueryOptions<Ingredient>
+            {
+                Includes = "ProductIngredients,ProductIngredients.Product"
+            }));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Ingredient ingredient)
+        {
+            if (ModelState.IsValid)
+            {
+                await ingredients.UpdateAsync(ingredient);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(ingredient);
+
         }
     }
 }
