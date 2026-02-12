@@ -1,8 +1,9 @@
 # RestaurantApp
 
-![Diagrama del sistema](docs/images/Diagrama.png)
-
 Aplicación web ASP.NET Core MVC para la gestión básica de un restaurante (productos, ingredientes, pedidos, usuarios).
+
+Diagrama.
+![Diagrama del sistema](docs/images/Diagrama.png)
 
 ## Descripción
 
