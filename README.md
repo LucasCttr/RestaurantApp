@@ -7,13 +7,13 @@ Diagrama.
 
 ## Descripción
 
-Proyecto con fines de aprendizaje que implementa un catálogo de productos con ingredientes, carrito de compras y gestión de pedidos. Está construido con ASP.NET Core 8 (MVC) y Razor Views, y sigue un patrón típico de aplicación web con inyección de dependencias y repositorios.
+Proyecto con fines de aprendizaje que implementa un catálogo de productos con ingredientes, carrito de compras y gestión de pedidos. Está construido con ASP.NET Core 8 (MVC) y Razor Views, y sigue un patrón típico de aplicación web con inyección de dependencias y repositorios. Incluye un rol `Employee` destinado a diferenciar los clientes de los empleados, permite acciones administrativas como crear/editar/eliminar productos e ingredientes.
 
 Tecnologías y componentes principales:
 
 - **ASP.NET Core 8 (MVC)**: controladores, rutas y vistas Razor para la capa de presentación.
 - **Entity Framework Core**: mapeo objeto-relacional, `AppDbContext` y migraciones en la carpeta `Migrations`.
-- **ASP.NET Identity**: gestión de usuarios extendida con `ApplicationUser` para autenticación y relación con pedidos.
+- **ASP.NET Identity**: proveedor de autenticación y autorización; roles y tablas (`AspNetUsers`, `AspNetRoles`, `AspNetUserRoles`) gestionadas por Identity y extendidas por `ApplicationUser`.
 - **Bootstrap + jQuery**: librerías front-end incluidas en `wwwroot/lib` para estilos y comportamientos UI.
 - **Manejo de imágenes**: subida de archivos mediante `IFormFile` y almacenamiento referenciado por `ImageUrl` en `Product`.
 - **Base de datos**: por defecto preparada para SQL Server (configurable en `appsettings.json`), pero compatible con otras bases soportadas por EF Core.
