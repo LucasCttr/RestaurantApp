@@ -13,17 +13,21 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    // Muestra la página principal (Index).
     public IActionResult Index()
     {
         return View();
     }
 
+
+    // Muestra la página de privacidad.
     public IActionResult Privacy()
     {
         return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    // Muestra la vista de error con información del RequestId.
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

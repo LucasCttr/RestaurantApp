@@ -15,12 +15,13 @@ namespace RestaurantApp.Controllers
         {
             this.ingredients = new Repository<Ingredient>(context);
         }
-
+        // Lista todos los ingredientes.
         public async Task<IActionResult> Index()
         {
             return View(await ingredients.GetAllAsync());
         }
 
+        // Muestra los detalles de un ingrediente, incluyendo productos relacionados.
         public async Task<IActionResult> Details(int id)
         {
             var options = new QueryOptions<Ingredient>();
@@ -33,6 +34,7 @@ namespace RestaurantApp.Controllers
 
         // Ingredient/Create
         [HttpGet]
+        // Muestra el formulario para crear un nuevo ingrediente.
         public IActionResult Create()
         {
             return View();
@@ -40,6 +42,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // Procesa la creación de un nuevo ingrediente.
         public async Task<IActionResult> Create([Bind("IngredientId, Name")] Ingredient ingredient)
         {
             if (ModelState.IsValid)
@@ -53,6 +56,7 @@ namespace RestaurantApp.Controllers
 
         // Ingredient/Delete/{id}
         [HttpGet]
+        // Muestra la confirmación para eliminar un ingrediente.
         public async Task<IActionResult> Delete(int id)
         {
             return View(await ingredients.GetByIdAsync(id, new QueryOptions<Ingredient>
@@ -63,6 +67,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // Elimina el ingrediente confirmado.
         public async Task<IActionResult> Delete(Ingredient ingredient)
         {
             await ingredients.DeleteAsync(ingredient.IngredientId);
@@ -71,6 +76,7 @@ namespace RestaurantApp.Controllers
 
         // Ingredient/Edit/{id}
         [HttpGet]
+        // Muestra el formulario para editar un ingrediente.
         public async Task<IActionResult> Edit(int id)
         {
             return View(await ingredients.GetByIdAsync(id, new QueryOptions<Ingredient>
@@ -81,6 +87,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // Procesa la edición del ingrediente.
         public async Task<IActionResult> Edit(Ingredient ingredient)
         {
             if (ModelState.IsValid)

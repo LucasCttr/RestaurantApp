@@ -31,12 +31,14 @@ namespace RestaurantApp.Controllers
             _context = context;
         }
 
+        // Redirige a la acción Create (inicio del proceso de pedido).
         public IActionResult Index()
         {
             return RedirectToAction("Create");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        // Acción Error del controlador de pedidos (cache deshabilitado).
         public IActionResult Error()
         {
             return View("Error!");
@@ -44,6 +46,7 @@ namespace RestaurantApp.Controllers
 
         [HttpGet]
         [Authorize]
+        // Muestra la vista de creación/edición del pedido (carrito): lista de productos y items en sesión.
         public async Task<IActionResult> Create()
         {
             var model = HttpContext.Session.Get<OrderViewModel>("OrderViewModel") ?? new OrderViewModel
@@ -56,6 +59,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [Authorize]
+        // Añade un producto al carrito (guardado en sesión). Si ya existe, incrementa la cantidad.
         public async Task<IActionResult> AddItem(int prodId, int prodQty)
         {
             var product = await _context.Products.FindAsync(prodId);
@@ -99,6 +103,7 @@ namespace RestaurantApp.Controllers
 
         [HttpGet]
         [Authorize]
+        // Muestra el carrito (OrderViewModel) con los items en sesión.
         public async Task<IActionResult> Cart()
         {
             var model = HttpContext.Session.Get<OrderViewModel>("OrderViewModel");
@@ -111,6 +116,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [Authorize]
+        // Convierte el contenido del carrito en un pedido persistente y limpia la sesión.
         public async Task<IActionResult> PlaceOrder()
         {
             var model = HttpContext.Session.Get<OrderViewModel>("OrderViewModel");
@@ -148,6 +154,7 @@ namespace RestaurantApp.Controllers
 
         [HttpGet]
         [Authorize]
+        // Muestra los pedidos realizados por el usuario autenticado.
         public async Task<IActionResult> ViewOrders()
         {
             var userId = _userManager.GetUserId(User);
