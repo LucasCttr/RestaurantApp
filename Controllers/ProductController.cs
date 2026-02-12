@@ -18,6 +18,7 @@ namespace RestaurantApp.Controllers
         private Repository<Ingredient> ingredients;
         private Repository<Category> categories;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly AppDbContext _context;
 
         public ProductController(ILogger<ProductController> logger, AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
@@ -26,6 +27,7 @@ namespace RestaurantApp.Controllers
             this.categories = new Repository<Category>(context);
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -77,13 +79,12 @@ namespace RestaurantApp.Controllers
                     ViewBag.Ingredients = await ingredients.GetAllAsync();
                     ViewBag.Categories = await categories.GetAllAsync();
                     product.CategoryId = catId;
-
+                    product.ProductIngredients = new List<ProductIngredient>();
                     foreach (int id in ingredientIds)
                     {
-                        product.ProductIngredients?.Add(new ProductIngredient
+                        product.ProductIngredients.Add(new ProductIngredient
                         {
-                            IngredientId = id,
-                            ProductId = product.ProductId
+                            IngredientId = id
                         });
                     }
                     await products.AddAsync(product);
@@ -145,6 +146,37 @@ namespace RestaurantApp.Controllers
                 }
             }
             return RedirectToAction("index", "Product");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var product = await products.GetByIdAsync(id, new QueryOptions<Product>
+                {
+                    Includes = "ProductIngredients"
+                });
+                if (product != null)
+                {
+                    // Remove related ProductIngredients
+                    if (product.ProductIngredients != null)
+                    {
+                        foreach (var pi in product.ProductIngredients)
+                        {
+                            _context.ProductIngredients.Remove(pi);
+                        }
+                    }
+                    await products.DeleteAsync(id);
+                }
+                return RedirectToAction("index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting product");
+                ModelState.AddModelError("", "An error occurred while deleting the product.");
+                return RedirectToAction("index");
+            }
         }
     }
 }
