@@ -1,16 +1,27 @@
 # RestaurantApp
 
+![Diagrama del sistema](docs/images/Diagrama.png)
+
 Aplicación web ASP.NET Core MVC para la gestión básica de un restaurante (productos, ingredientes, pedidos, usuarios).
 
 ## Descripción
 
-Proyecto con fines de aprendizaje que implementa un catálogo de productos con ingredientes, carrito de compras y gestión de pedidos. Usa Entity Framework Core para acceso a datos y migraciones.
+Proyecto con fines de aprendizaje que implementa un catálogo de productos con ingredientes, carrito de compras y gestión de pedidos. Está construido con ASP.NET Core 8 (MVC) y Razor Views, y sigue un patrón típico de aplicación web con inyección de dependencias y repositorios.
+
+Tecnologías y componentes principales:
+
+- **ASP.NET Core 8 (MVC)**: controladores, rutas y vistas Razor para la capa de presentación.
+- **Entity Framework Core**: mapeo objeto-relacional, `AppDbContext` y migraciones en la carpeta `Migrations`.
+- **ASP.NET Identity**: gestión de usuarios extendida con `ApplicationUser` para autenticación y relación con pedidos.
+- **Bootstrap + jQuery**: librerías front-end incluidas en `wwwroot/lib` para estilos y comportamientos UI.
+- **Manejo de imágenes**: subida de archivos mediante `IFormFile` y almacenamiento referenciado por `ImageUrl` en `Product`.
+- **Base de datos**: por defecto preparada para SQL Server (configurable en `appsettings.json`), pero compatible con otras bases soportadas por EF Core.
 
 ## Requisitos
 
 - .NET 8 SDK
 - EF Core Tools (opcional para aplicar migraciones desde la CLI)
-- Base de datos compatible (La utilizada es SQL Server). Ajustar `ConnectionStrings` en `appsettings.json`.
+- Base de datos compatible. Ajustar `ConnectionStrings` en `appsettings.json`.
 
 ## Instalación y ejecución
 
