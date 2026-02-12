@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using RestaurantApp.Data;
@@ -36,6 +37,7 @@ namespace RestaurantApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> AddEdit(int id)
         {
             ViewBag.Ingredients = await ingredients.GetAllAsync();
@@ -59,6 +61,7 @@ namespace RestaurantApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> AddEdit(Product product, int[] ingredientIds, int catId)
         {
             if (ModelState.IsValid)
@@ -149,6 +152,7 @@ namespace RestaurantApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Delete(int id)
         {
             try

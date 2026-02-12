@@ -1,6 +1,7 @@
 
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using RestaurantApp.Data;
 using RestaurantApp.Models;
@@ -34,6 +35,7 @@ namespace RestaurantApp.Controllers
 
         // Ingredient/Create
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         // Muestra el formulario para crear un nuevo ingrediente.
         public IActionResult Create()
         {
@@ -42,6 +44,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         // Procesa la creación de un nuevo ingrediente.
         public async Task<IActionResult> Create([Bind("IngredientId, Name")] Ingredient ingredient)
         {
@@ -56,6 +59,7 @@ namespace RestaurantApp.Controllers
 
         // Ingredient/Delete/{id}
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         // Muestra la confirmación para eliminar un ingrediente.
         public async Task<IActionResult> Delete(int id)
         {
@@ -67,6 +71,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         // Elimina el ingrediente confirmado.
         public async Task<IActionResult> Delete(Ingredient ingredient)
         {
@@ -76,6 +81,7 @@ namespace RestaurantApp.Controllers
 
         // Ingredient/Edit/{id}
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         // Muestra el formulario para editar un ingrediente.
         public async Task<IActionResult> Edit(int id)
         {
@@ -87,6 +93,7 @@ namespace RestaurantApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         // Procesa la edición del ingrediente.
         public async Task<IActionResult> Edit(Ingredient ingredient)
         {

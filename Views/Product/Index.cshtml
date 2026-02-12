@@ -16,7 +16,10 @@
     }
 }
 <h1>Menu Items</h1>
-<a asp-action="AddEdit" class="btn btn-primary">Create New Menu Item</a>
+@if (User.IsInRole("Employee"))
+{
+    <a asp-action="AddEdit" class="btn btn-primary">Create New Menu Item</a>
+}
 
 <div class="row g-4">
     @foreach (Product pi in Model)
@@ -32,12 +35,15 @@
                         <p class="card-text">@pi.Description</p>
                         <p class="card-text">@pi.Price.ToString("C")</p>
                         <p class="card-text">Quantity In Stock: @pi.Stock</p>
-                        <a class="btn btn-info" asp-controller="Product" asp-action="AddEdit"
-                           asp-route-id="@pi.ProductId"><i class="bi bi-pencil-fill"> Edit</i> </a>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="@GetDeleteModalId(pi)">
-                            <i class="bi bi-trash-fill"> Delete</i>
-                        </button>
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <a class="btn btn-info" asp-controller="Product" asp-action="AddEdit"
+                               asp-route-id="@pi.ProductId"><i class="bi bi-pencil-fill"> Edit</i> </a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="@GetDeleteModalId(pi)">
+                                <i class="bi bi-trash-fill"> Delete</i>
+                            </button>
+                        }
                         <div class="modal fade" id="@GetModalId(pi)" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
